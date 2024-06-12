@@ -1,0 +1,4 @@
+## Append samples of your project ##
+resources:
+- rudro.dev_v1_kubebuildercrd.yaml
+# +kubebuilder:scaffold:manifestskustomizesamples

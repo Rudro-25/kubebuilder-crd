@@ -1,0 +1,9 @@
+apiVersion: rudro.dev.rudro.dev/v1
+kind: KubebuilderCrd
+metadata:
+  labels:
+    app.kubernetes.io/name: kubebuilder-crd
+    app.kubernetes.io/managed-by: kustomize
+  name: kubebuildercrd-sample
+spec:
+  # TODO(user): Add fields here

@@ -1,0 +1,23 @@
+# permissions for end users to view kubebuildercrds.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: kubebuilder-crd
+    app.kubernetes.io/managed-by: kustomize
+  name: kubebuildercrd-viewer-role
+rules:
+- apiGroups:
+  - rudro.dev.rudro.dev
+  resources:
+  - kubebuildercrds
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - rudro.dev.rudro.dev
+  resources:
+  - kubebuildercrds/status
+  verbs:
+  - get
