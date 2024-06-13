@@ -1,8 +1,44 @@
 # kubebuilder-crd
 // TODO(user): Add simple overview of use/purpose
 
+// 1. download kubebuilder and install locally.
+
+`curl -L -o kubebuilder "https://go.kubebuilder.io/dl/latest/$(go env GOOS)/$(go env GOARCH)"`
+
+`chmod +x kubebuilder && mv kubebuilder /usr/local/bin/`
+
+//2. Create a Project
+
+`mkdir -p ~/projects/kubebuilder-crd`
+
+`cd ~/projects/kubebuilder-crd`
+
+`kubebuilder init --domain rudro.dev --repo rudro.dev/kubebuilder-crd`
+
+// 3. Create an api
+
+`kubebuilder create api --group rudro.dev --version v1 --kind KubebuilderCrd`
+`make manifests`
+
+// 4. apply
+
+` kubectl apply -f config/crd/bases/rudro.dev.rudro.dev_kubebuildercrds.yaml`
+
+`kubectl apply -f config/samples/rudro.dev_v1_kubebuildercrd.yaml`
+
+// 5. Run
+
+` go run cmd/main.go`
+
+// 6. Delete deploy/svc or up-scale replicas of deploy. Cntroller will reconcile it automatically.
+
+` kubectl delete deployments,svc --all -n demo`
+
+`kubectl scale deployment server --replicas=7 -n demo`
+
 ## Description
 // TODO(user): An in-depth paragraph about your project and overview of use
+//
 
 ## Getting Started
 

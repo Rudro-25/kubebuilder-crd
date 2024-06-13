@@ -66,6 +66,8 @@ type ServiceSpec struct {
 type KubebuilderCrdStatus struct {
 	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
+	// +optional
+	AvailableReplicas *int32 `json:"availableReplicas"`
 }
 
 // +kubebuilder:object:root=true
