@@ -34,7 +34,15 @@
 
 ` kubectl delete deployments,svc --all -n demo`
 
+//It only work for own not work for watcher
+
 `kubectl scale deployment server --replicas=7 -n demo`
+
+//7. Port-Forwarding
+
+`kubectl port-forward service/kubebuildercrd-sample-svc 8080 -n demo`
+
+`http://localhost:8080/`
 
 ## Description
 // TODO(user): An in-depth paragraph about your project and overview of use
