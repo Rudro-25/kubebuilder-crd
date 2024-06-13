@@ -55,7 +55,7 @@ type KubebuilderCrdReconciler struct {
 func (r *KubebuilderCrdReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	r.Log = ctrl.Log.WithValues("KubebuilderCrd", req.NamespacedName)
 	r.ctx = ctx
-
+	//fmt.Println("INside reconcile")
 	// TODO(user): your logic here
 
 	var kubebuildercrd crdv1.KubebuilderCrd

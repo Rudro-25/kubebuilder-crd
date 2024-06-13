@@ -4,6 +4,13 @@ metadata:
   labels:
     app.kubernetes.io/name: kubebuilder-crd
     app.kubernetes.io/managed-by: kustomize
-  name: kubebuildercrd-sample
+  name:  kubebuildercrd-sample
+  namespace: demo
 spec:
-  # TODO(user): Add fields here
+  replicas: 5
+  deploymentName: server
+  container:
+    image: "rudro25/bookapiserver:latest"
+    port: 8080
+  service:
+    serviceType: "NodePort"

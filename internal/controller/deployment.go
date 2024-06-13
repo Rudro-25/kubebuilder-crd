@@ -7,6 +7,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	crdv1 "rudro.dev/kubebuilder-crd/api/v1"
+	"time"
 )
 
 func (r *KubebuilderCrdReconciler) CheckDeployment() error {
@@ -30,6 +31,7 @@ func (r *KubebuilderCrdReconciler) CheckDeployment() error {
 	}
 	if r.kubebuildercrd.Spec.Replicas != nil && *deploy.Spec.Replicas != *r.kubebuildercrd.Spec.Replicas {
 		r.Log.Info("replica mismatch...")
+		time.Sleep(time.Second)
 		*deploy.Spec.Replicas = *r.kubebuildercrd.Spec.Replicas
 		if err := r.Client.Update(r.ctx, deploy); err != nil {
 			r.Log.Error(err, "Failed to update Deployment", "Namespace", deploy.Namespace, "Name", deploy.Name)
@@ -67,9 +69,11 @@ func (r *KubebuilderCrdReconciler) NewDeployment() *appsv1.Deployment {
 						{
 							Name:  "kubebuildercrd-container",
 							Image: r.kubebuildercrd.Spec.Container.Image,
+							//Image: "rudro25/bookapiserver",
 							Ports: []corev1.ContainerPort{
 								{
 									ContainerPort: r.kubebuildercrd.Spec.Container.Port,
+									//ContainerPort: 8081,
 								},
 							},
 						},
