@@ -138,6 +138,7 @@ func (r *KubebuilderCrdReconciler) SetupWithManager(mgr ctrl.Manager) error {
 		Complete(r)
 
 	//
+	//Main part. Simplified. Comment above for simplification.
 	//return ctrl.NewControllerManagedBy(mgr).
 	//	For(&crdv1.KubebuilderCrd{}).
 	//	Owns(&appsv1.Deployment{}).
