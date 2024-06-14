@@ -34,8 +34,6 @@
 
 ` kubectl delete deployments,svc --all -n demo`
 
-//It only work for own not work for watcher
-
 `kubectl scale deployment server --replicas=7 -n demo`
 
 //7. Port-Forwarding
