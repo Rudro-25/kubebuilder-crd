@@ -18,7 +18,6 @@ package controller
 
 import (
 	"context"
-	"fmt"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
@@ -78,6 +77,7 @@ func (r *KubebuilderCrdReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	// Implementation with watches and custom eventHandler
 	// if someone edit the resources(here example given for deployment resource) by kubectl
 	handlerFunc := handler.EnqueueRequestsFromMapFunc(func(ctx context.Context, obj client.Object) []reconcile.Request {
+		//fmt.Println("111111111111111111111111")
 		// List all the CR
 		customRs := &crdv1.KubebuilderCrdList{}
 		if err := r.List(context.Background(), customRs); err != nil {
@@ -86,13 +86,8 @@ func (r *KubebuilderCrdReconciler) SetupWithManager(mgr ctrl.Manager) error {
 		// This func return a reconcile request array
 		var req []reconcile.Request
 		for _, c := range customRs.Items {
-			deploymentName := func() string {
-				if c.Spec.DeploymentName == "" {
-					return c.Name + "-" + "randomName"
-				} else {
-					return c.Name + "-" + c.Spec.DeploymentName
-				}
-			}()
+			//fmt.Println("crrrrrrrrrrrrrr", c.Name)
+			deploymentName := c.DeploymentName()
 			// Find the deployment owned by the CR
 			if deploymentName == obj.GetName() && c.Namespace == obj.GetNamespace() {
 				deploy := &appsv1.Deployment{}
@@ -100,6 +95,7 @@ func (r *KubebuilderCrdReconciler) SetupWithManager(mgr ctrl.Manager) error {
 					Namespace: obj.GetNamespace(),
 					Name:      obj.GetName(),
 				}, deploy); err != nil {
+					//fmt.Println("2222222222222222222222", obj.GetName(), c.Name)
 					// This case can happen if somehow deployment gets deleted by
 					// Kubectl command. We need to append new reconcile request to array
 					// to create desired number of deployment again.
@@ -112,18 +108,22 @@ func (r *KubebuilderCrdReconciler) SetupWithManager(mgr ctrl.Manager) error {
 						})
 						continue
 					} else {
+						//fmt.Println("errrrrrrrrrrrr", err)
 						return nil
 					}
 				}
 				// Only append to the reconcile request array if replica count miss match.
-				if deploy.Spec.Replicas != c.Spec.Replicas {
-					fmt.Println("checking", deploy.Spec.Replicas, c.Spec.Replicas)
-					req = append(req, reconcile.Request{
-						NamespacedName: types.NamespacedName{
-							Namespace: c.Namespace,
-							Name:      c.Name,
-						},
-					})
+				if deploy.Spec.Replicas != nil && c.Spec.Replicas != nil {
+					//fmt.Println(*deploy.Spec.Replicas, *c.Spec.Replicas, deploy.Name, c.Name)
+					if *deploy.Spec.Replicas != *c.Spec.Replicas {
+						//fmt.Println("checking", *deploy.Spec.Replicas, *c.Spec.Replicas)
+						req = append(req, reconcile.Request{
+							NamespacedName: types.NamespacedName{
+								Namespace: c.Namespace,
+								Name:      c.Name,
+							},
+						})
+					}
 				}
 			}
 		}
